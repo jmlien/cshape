@@ -16,7 +16,7 @@
   \begin{center}
   \framebox{
     \vbox{
-      \hbox to 5.78in { {\bf CS499: Geometric Computing} \hfill #2 }
+      \hbox to 5.78in { {\bf Advanced Algorithms} \hfill #2 }
       \vspace{4mm}
       \hbox to 5.78in { {\Large \hfill #5  \hfill} }
       \vspace{2mm}
@@ -55,24 +55,37 @@
 
 \begin{document}
 
-\lecture{Program Assignment 2 --- Due Nov 7, 11:59pm, 2012}{Fall 2012}{Prof.\ Jyh-Ming Lien}{---}
+\lecture{Program Assignment 1}{Fall 2015}{Prof.\ Jyh-Ming Lien}{---}
 
 
 The goal of this programming assignment is to deepen  your understanding on 3-d Voronoi Diagram, Delaunay Triangulation, as well as
 $\alpha$-shape and the 3-d crust algorithm. Another goal is to let you familiar with some well known libraries.
 Therefore, in this assignment, you are allowed to use a package called ``\href{http://www.qhull.org/}{qhull}".
-There are 3 parts in this assignment. The first two parts are $\alpha$-shape and crust, respectively. 
-The last part is optional and is on manifold extraction.
+There are 3 parts in this assignment: (1) Delaunay triangulation, (2) $\alpha$-shape and (3) crust, respectively. 
 
 In addition to the implementation of the algorithms, you also need to turn in a report in \LaTeX. 
 Your report should include an overview of your implementation intuitions (e.g., how the circumsphere is computed, 
 how the poles are found from qhull), all the example outputs, known bugs, and known limitations.
 
-Send both the code and the report in a compressed file, named {\bf cs633-pa2-\{last {name}\}.zip} to my email address \href{mailto:jmlien@cs.gmu.edu}{\it jmlien@cs.gmu.edu}
+Use \href{https://github.com/}{github} to maintain  your code and the report. Email me your github clone command to my email address \href{mailto:jmlien@cs.gmu.edu}{\it jmlien@cs.gmu.edu}
 before the deadline.
 
-\section{Part 1: 3D $\alpha$-shape (50 pts)}
+\section{Part 1: 3D Delaunay Triangulation (30 pts)}
 
+This part of the assignment is due on Oct 14, 11:59pm, 2015.
+
+\subsection{What should  you do?}
+
+Your goal is to use \href{http://www.qhull.org/}{\it qhull} to compute Delaunay triangulation.
+Your input will be 3D points. In your code, you will lift all points to 4D so that each point is $(x, y, z, x^2+y^2+z^2)$.
+Then you will compute the convex hull in 4D then output the faces of the convex hull as tetrahedron. 
+The package qhull will be provided but, if you like, you can try to download and compile to latest version of it. 
+The output of your program should remain the same as it is now, therefore the provided OpenGL interface can understand your output.
+
+
+\section{Part 2: 3D $\alpha$-shape (30 pts)}
+
+This part is due on Oct 18, 11:59pm, 2015.
 
 For a given value of $\alpha$, 
 the $\alpha$-shape includes all the tetrahedra in the Delaunay triangulation which have an empty circumsphere with {\em squared radius} equal or smaller than $\alpha$.
@@ -108,14 +121,17 @@ the paper by Edelsbrunner and M\"{u}cke~\cite{em-tdas-94}.
 \subsection{What should  you do?}
 
 Your goal is to use \href{http://www.qhull.org/}{\it qhull} to implement Algorithm~\ref{alg:alphashape}.
-The package qhull will be provided but if you like, you can try to download and compile to latest version of it. 
+%The package qhull will be provided but if you like, you can try to download and compile to latest version of it. 
 The output of your program should remain the same as it is now, therefore
 the provided OpenGL interface can understand your output.
 
 
 
 
-\section{Part 2: Crust Algorithm (50 pts)}
+\section{Part 3: Crust Algorithm (40 pts)}
+
+This part is due on Oct 22, 11:59pm, 2015.
+
 
 %\begin{wrapfigure}{r}{0.5\textwidth}
 %\vspace{-1cm}
@@ -156,12 +172,12 @@ the provided OpenGL interface can understand your output.
 
 
 
-\section{Part 3: Manifold Extraction (25 pts bonus)}
-
-As described in \cite{abk-anvra-98}, the result of the crust algorithm is likely to be non-manifold. That is
-there can still be very thin/flat tetrahedra  (called slivers) in the output. Your goal here is to remove the triangles
-so that the remaining mesh is a manifold. That is the incident facets of every vertex form a disc and
-every edge is incident to at most two faces. 
+%\section{Part 4: Manifold Extraction (25 pts bonus)}
+%
+%As described in \cite{abk-anvra-98}, the result of the crust algorithm is likely to be non-manifold. That is
+%there can still be very thin/flat tetrahedra  (called slivers) in the output. Your goal here is to remove the triangles
+%so that the remaining mesh is a manifold. That is the incident facets of every vertex form a disc and
+%every edge is incident to at most two faces. 
 
 \bibliographystyle{plain}
 \bibliography{shape-assignment}
