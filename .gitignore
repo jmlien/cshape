@@ -1,0 +1,6 @@
+*.[oa]
+*.obj
+*.aux
+*.log
+*.synctex.gz
+*.exe
