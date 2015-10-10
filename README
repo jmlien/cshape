@@ -1,0 +1,42 @@
+===============================================================================
+* To generate the shape-assignment.pdf
+
+Go to ./assignment and type make
+
+If you are using Windows, you may want to install Miktex
+Once Miktex is installed, type m.bat
+
+===============================================================================
+* To compile code:
+
+Go to ./code and type make
+
+If you want openGL display and are using linux, 
+make sure that freeglut is installed
+http://freeglut.sourceforge.net/
+
+If you don't care about 3-d rendering,
+change "OPENGL_ON := 1" to "OPENGL_ON := 0" in the Makefile
+
+Linux users:
+Depend on your Linux version, you may want to change
+qhull.linux64 to qhull.linux in Makefile if your Linux is not a 64 bits version
+
+===============================================================================
+* To run:
+
+Type "shape" to see all the options
+
+A typical run will be something like this:
+
+shape i.cube            # this creates the convex hull of the shape
+shape -crust i.cube     # you will implement this
+shape -alpha 3 i.cube   # you will implement this
+
+There are two input files i.cube and i.ellipsoid
+You can create more input files using the code in "sphere"
+subdirectory. See the Readme file therein. 
+
+===============================================================================
+Let me know if there are problems.
+jmlien@cs.gmu.edu

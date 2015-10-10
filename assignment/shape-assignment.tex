@@ -1,0 +1,171 @@
+\documentclass[11pt]{article}
+
+\usepackage{latexsym}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{pseudocode}
+\usepackage{url}
+\usepackage[backref, colorlinks=true, citecolor=red, urlcolor=blue, pdfauthor={Jyh-Ming Lien}]{hyperref}
+
+
+\newcommand{\handout}[5]{
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { {\bf CS499: Geometric Computing} \hfill #2 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { {\em #3 \hfill #4} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newcommand{\lecture}[4]{\handout{#1}{#2}{#3}{}{#1}}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{assumption}[theorem]{Assumption}
+
+% 1-inch margins, from fullpage.sty by H.Partl, Version 2, Dec. 15, 1988.
+\topmargin 0pt
+\advance \topmargin by -\headheight
+\advance \topmargin by -\headsep
+\textheight 8.9in
+\oddsidemargin 0pt
+\evensidemargin \oddsidemargin
+\marginparwidth 0.5in
+\textwidth 6.5in
+
+\parindent 0in
+\parskip 1.5ex
+%\renewcommand{\baselinestretch}{1.25}
+
+\begin{document}
+
+\lecture{Program Assignment 2 --- Due Nov 7, 11:59pm, 2012}{Fall 2012}{Prof.\ Jyh-Ming Lien}{---}
+
+
+The goal of this programming assignment is to deepen  your understanding on 3-d Voronoi Diagram, Delaunay Triangulation, as well as
+$\alpha$-shape and the 3-d crust algorithm. Another goal is to let you familiar with some well known libraries.
+Therefore, in this assignment, you are allowed to use a package called ``\href{http://www.qhull.org/}{qhull}".
+There are 3 parts in this assignment. The first two parts are $\alpha$-shape and crust, respectively. 
+The last part is optional and is on manifold extraction.
+
+In addition to the implementation of the algorithms, you also need to turn in a report in \LaTeX. 
+Your report should include an overview of your implementation intuitions (e.g., how the circumsphere is computed, 
+how the poles are found from qhull), all the example outputs, known bugs, and known limitations.
+
+Send both the code and the report in a compressed file, named {\bf cs633-pa2-\{last {name}\}.zip} to my email address \href{mailto:jmlien@cs.gmu.edu}{\it jmlien@cs.gmu.edu}
+before the deadline.
+
+\section{Part 1: 3D $\alpha$-shape (50 pts)}
+
+
+For a given value of $\alpha$, 
+the $\alpha$-shape includes all the tetrahedra in the Delaunay triangulation which have an empty circumsphere with {\em squared radius} equal or smaller than $\alpha$.
+Algorithm~\ref{alg:alphashape} sketches this idea. Examples of $\alpha$-shape is illustrated in Figure~\ref{alg:alpha}.
+More detailed information about 3-d  $\alpha$-shape can be found in this 
+\href{http://www.cgal.org/Manual/latest/doc_html/cgal_manual/Alpha_shapes_3/Chapter_main.html}{CGAL page} and in
+the paper by Edelsbrunner and M\"{u}cke~\cite{em-tdas-94}.
+
+{\small
+	\begin{pseudocode}[shadowbox]{$\alpha$ shape}{P[1 \cdots n], \alpha}
+	\label{alg:alphashape}
+	\COMMENT{$P$ is a set $n$ points}\\
+	D = \text{Delaunay triangulation of $P$} \\
+	\FOREACH { \text{tetrahedron } t \in D} \DO
+	\BEGIN
+	\IF \text{the circumsphere of $t$ has squared radius larger than $\alpha$}  \DO
+		\text{Remove } t
+	\END
+	\end{pseudocode}
+}
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=.5\textwidth]{FIGS/alphashape}
+\caption{An example of alpha shape with different values}
+\label{alg:alpha}
+\end{figure}
+
+
+
+
+\subsection{What should  you do?}
+
+Your goal is to use \href{http://www.qhull.org/}{\it qhull} to implement Algorithm~\ref{alg:alphashape}.
+The package qhull will be provided but if you like, you can try to download and compile to latest version of it. 
+The output of your program should remain the same as it is now, therefore
+the provided OpenGL interface can understand your output.
+
+
+
+
+\section{Part 2: Crust Algorithm (50 pts)}
+
+%\begin{wrapfigure}{r}{0.5\textwidth}
+%\vspace{-1cm}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.5\textwidth]{FIGS/crust-alg}
+\caption{3D crust algorithm}
+\label{alg:crust-alg}
+%\vspace{-1cm}
+%\end{wrapfigure}
+\end{figure}
+
+The idea of Crust for surface reconstruction is proposed by Nina Amenta et al. \cite{abk-anvra-98} in 1998.
+Briefly, the crust of a set of points is a set of edges (in 2d) or triangles (in 3d) whose circumcircles is empty of
+(1) input points and (2) the medial axis.  A complete crust algorithm is shown in Fig.~\ref{alg:crust-alg}.
+
+
+The main challenge of this part of assignment is to find the poles for each site. The poles
+of site $s$ are the furthest vertices of $s$'s Voronoi cell; one on each side of the surface. 
+An example of the poles is shown in Fig.~\ref{fig:crust-pole}.
+
+
+\begin{figure}[ht]
+\centering
+\begin{minipage}[t]{0.5\linewidth}
+\includegraphics[width=\textwidth]{FIGS/crust-pole}
+\caption{Poles}
+\label{fig:crust-pole}
+\end{minipage}
+\end{figure}
+
+
+\subsection{What should  you do?}
+
+Your goal is to use \href{http://www.qhull.org/}{\it qhull} to implement the crust algorithm.
+The output of your program should remain the same as it is now, therefore
+the provided OpenGL interface can understand your output.
+
+
+
+\section{Part 3: Manifold Extraction (25 pts bonus)}
+
+As described in \cite{abk-anvra-98}, the result of the crust algorithm is likely to be non-manifold. That is
+there can still be very thin/flat tetrahedra  (called slivers) in the output. Your goal here is to remove the triangles
+so that the remaining mesh is a manifold. That is the incident facets of every vertex form a disc and
+every edge is incident to at most two faces. 
+
+\bibliographystyle{plain}
+\bibliography{shape-assignment}
+
+\end{document}
+
+
