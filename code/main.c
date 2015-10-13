@@ -246,8 +246,8 @@ int main( int argc, char *argv[] )
        QHull(); //this simply shows an example of how qhull can be used to build CH
    }
       
-   if(vertices==NULL || faces==NULL || edges==NULL){
-       printf("! Error: empty vertices, faces or edges\n"); 
+   if(vertices==NULL && faces==NULL && edges==NULL && tetras==NULL){
+       printf("! Error: empty tetras, vertices, faces and edges\n"); 
        return 1;
    }
    
